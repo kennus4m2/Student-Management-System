@@ -99,12 +99,30 @@ class StudentManager implements Manageable{
     public void add(){
 
         System.out.println("\n--- Add Student (BSCS 2-1 Only) ---");
-        try { 
-            System.out.print("Student ID: ");
-            String id = sc.nextLine();
+        try{ 
+            String id;
+            while (true){
+                System.out.print("Student ID: ");
+                id = sc.nextLine();
 
-            System.out.print("Name: ");
-            String name = sc.nextLine(); //may name po na merong number (stop discrimination sir)
+                if (id.isBlank()){
+                    System.out.println("Bawal po an blank lang! ompo.");
+                } else {
+                    break;
+                }
+            }
+
+            String name;
+            while (true){
+                System.out.print("Name: ");
+                name = sc.nextLine(); //may name po na merong number (stop discrimination sir)
+
+                if (name.isBlank()){
+                    System.out.println("Syempre may pangaran ka!");
+                } else {
+                    break;
+                }
+            }
 
             int age = 0;
             while (true){
@@ -162,8 +180,17 @@ class StudentManager implements Manageable{
 
     @Override
     public void search(){
-        System.out.print("Enter student ID to search: ");
-        String id = sc.nextLine();
+        String id;
+        while (true){
+            System.out.print("Enter student ID to search: ");
+            id = sc.nextLine();
+
+            if (id.isBlank()){
+                System.out.println("Student ID cannot be blank!");
+            } else {
+                break;
+            }
+        }
 
         for (int i = 0; i < count; i++){
             if (students[i].getId().equals(id)){
@@ -177,14 +204,32 @@ class StudentManager implements Manageable{
 
     @Override 
     public void update(){
-        System.out.print("Enter student ID to update: ");
-        String id = sc.nextLine();
+        String id;
+        while (true){
+            System.out.print("Enter student ID to update: ");
+            id = sc.nextLine();
+
+            if (id.isBlank()){
+                System.out.println("Student ID cannot be blank!");
+            } else {
+                break;
+            }
+        }
 
         for (int i = 0; i < count; i++){
             if (students[i].getId().equals(id)){
 
-                System.out.print("New Name: ");
-                String name = sc.nextLine();
+                String name;
+                while (true){
+                    System.out.print("New Name: ");
+                    name = sc.nextLine();
+
+                    if (name.isBlank()){
+                        System.out.println("Name cannot be blank!");
+                    } else {
+                        break;
+                    }
+                }
                 students[i].setName(name);
 
                 int age = 0;
@@ -228,8 +273,17 @@ class StudentManager implements Manageable{
 
     @Override 
     public void delete(){
-        System.out.print("Enter student ID to delete: ");
-        String id = sc.nextLine();
+        String id;
+        while (true){
+            System.out.print("Enter student ID to delete: ");
+            id = sc.nextLine();
+
+            if (id.isBlank()){
+                System.out.println("Student ID cannot be blank!");
+            } else {
+                break;
+            }
+        }
 
         for (int i = 0; i < count; i++){
             if (students[i].getId().equals(id)){
