@@ -1,6 +1,49 @@
 import java.util.Scanner;
 import java.util.InputMismatchException;
 
+// 😛Main Class😛
+public class StudentMS{
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        StudentManager manager = new StudentManager(sc);
+
+        while (true){
+            System.out.println("\n--- STUDENT MANAGEMENT SYSTEM (BSCS 2-1) ---");
+            System.out.println("1. Add Student");
+            System.out.println("2. View All Students");
+            System.out.println("3. Search Student");
+            System.out.println("4. Update Student");
+            System.out.println("5. Delete Student");
+            System.out.println("6. Exit");
+            System.out.print("Choose an option: ");
+
+            int choice = 0;
+            try{
+                choice = sc.nextInt();
+                sc.nextLine();
+            }
+            catch (InputMismatchException e){
+                System.out.println("Please enter a number for choice!");
+                sc.nextLine();
+                continue;
+            }
+            
+            switch (choice){
+                case 1 -> manager.add();
+                case 2 -> manager.viewAll();
+                case 3 -> manager.search();
+                case 4 -> manager.update();
+                case 5 -> manager.delete();
+                case 6 -> {
+                    System.out.println("Exiting system...");
+                    sc.close();
+                    return;
+                }
+                default -> System.out.println("Invalid choice po!");
+            }
+        }
+    }
+}
 // 🤩Abstract Class🤩
 abstract class Person{
     private String name;
@@ -194,12 +237,12 @@ class StudentManager implements Manageable{
 
         for (int i = 0; i < count; i++){
             if (students[i].getId().equals(id)){
-                System.out.println("Student found:");
+                System.out.println("\nStudent found:");
                 students[i].describe();
                 return;
             }
         }
-        System.out.println("Student not found.");
+        System.out.println("Student not found");
     }
 
     @Override 
@@ -296,49 +339,5 @@ class StudentManager implements Manageable{
             }
         }
         System.out.println("Student not found.");
-    }
-}
-
-// 😛Main Class😛
-public class StudentMS{
-    public static void main(String[] args){
-        Scanner sc = new Scanner(System.in);
-        StudentManager manager = new StudentManager(sc);
-
-        while (true){
-            System.out.println("\n--- STUDENT MANAGEMENT SYSTEM (BSCS 2-1) ---");
-            System.out.println("1. Add Student");
-            System.out.println("2. View All Students");
-            System.out.println("3. Search Student");
-            System.out.println("4. Update Student");
-            System.out.println("5. Delete Student");
-            System.out.println("6. Exit");
-            System.out.print("Choose an option: ");
-
-            int choice = -1;
-            try{
-                choice = sc.nextInt();
-                sc.nextLine();
-            }
-            catch (InputMismatchException e){
-                System.out.println("Please enter a number for choice!");
-                sc.nextLine();
-                continue;
-            }
-            
-            switch (choice){
-                case 1 -> manager.add();
-                case 2 -> manager.viewAll();
-                case 3 -> manager.search();
-                case 4 -> manager.update();
-                case 5 -> manager.delete();
-                case 6 -> {
-                    System.out.println("Exiting system...");
-                    sc.close();
-                    return;
-                }
-                default -> System.out.println("Invalid choice po!");
-            }
-        }
     }
 }
