@@ -1,3 +1,11 @@
+/*
+    Name: Nickson M. Formento
+    Course/Year/Block: BSCS 2-1
+    email: formentonickson@gmail.com
+    github: kennus4m2
+    Description: A simple Student Management System for BSCS 2-1 students only.
+*/
+
 import java.util.Scanner;
 import java.util.InputMismatchException;
 
@@ -27,7 +35,7 @@ public class StudentMS{
                 sc.nextLine();
                 continue;
             }
-            
+
             switch (choice){
                 case 1 -> manager.add();
                 case 2 -> manager.viewAll();
@@ -39,25 +47,24 @@ public class StudentMS{
                     sc.close();
                     return;
                 }
-                default -> System.out.println("Invalid choice po!");
+                default -> System.out.println("Invalid choice!");
             }
         }
     }
 }
+
 // 🤩Abstract Class🤩
 abstract class Person{
     private String name;
     private int age;
 
-    public Person(String name, int age){  // simple constructor
-        this.name = name; // "this." keyword is used
+    public Person(String name, int age){
+        this.name = name;
         this.age = age;
     }
 
-    //abstract method
-    public abstract void describe(); // Polymorphism (over-🛵, haha corny)
+    public abstract void describe();
 
-    // Encapsulation🔒🔑 (public access modifiers), (getters and setters)
     public String getName(){
         return name;
     }
@@ -65,29 +72,29 @@ abstract class Person{
         return age;
     }
     public void setName(String name){
-        this.name = name;
+        this.name = name; 
     }
-    public void setAge(int age){
-        this.age = age;
+    public void setAge(int age){ 
+        this.age = age; 
     }
 }
 
 // 🤓Interface🤓
-interface Manageable{ //contains abstract method/s
+interface Manageable{
     void add();
     void viewAll();
-    void search(); 
+    void search();
     void update();
     void delete();
 }
 
-// 👨‍🎓🏫 Class👨‍🎓🏫
-class Student extends Person{ //inheritance (extends keyword)
-    private String id; //private access modifier
-    private final String section = "BSCS 2-1"; // 'final' a non-access modifier used to restrict modification
+// 👨‍🎓🏫 Student Class👨‍🎓🏫
+class Student extends Person{
+    private String id;
+    private final String section = "BSCS 2-1";
 
-    private static int totalStudents = 0; 
-    private static double[] grades = new double[50]; // in-limit ko man lang sir up to 50 students
+    private static int totalStudents = 0;
+    private static float[] grades = new float[50]; //float na iyan
     private int gradeIndex;
 
     public Student(String id, String name, int age){
@@ -95,35 +102,27 @@ class Student extends Person{ //inheritance (extends keyword)
         this.id = id;
 
         this.gradeIndex = totalStudents;
-        grades[gradeIndex] = 0.0;
+        grades[gradeIndex] = 0.0f;
         totalStudents++;
     }
 
-    @Override 
+    @Override
     public void describe(){
         System.out.println("ID: " + id + " | Name: " + getName() + " | Age: " + getAge() +
-                           " | Course/Year/Block: " + section + " | Grade: " + grades[gradeIndex]);
+            " | Course/Year/Block: " + section + " | Grade: " + grades[gradeIndex]
+        );
     }
 
-    // Encapsulation ulit (getters only)🔐
     public String getId(){ 
         return id; 
     }
-
-    public String getSection(){ 
-        return section;
+    public void setGrade(float grade){ 
+        grades[gradeIndex] = grade; 
     }
-
-    // Grade handling (setters sa Grade)
-    public void setGrade(double grade){ 
-        grades[gradeIndex] = grade;
+    public float getGrade(){ 
+        return grades[gradeIndex]; 
     }
-
-    public double getGrade(){
-        return grades[gradeIndex];
-    }
-
-    public static int getTotalStudents(){
+    public static int getTotalStudents(){ 
         return totalStudents; 
     }
 }
@@ -135,80 +134,94 @@ class StudentManager implements Manageable{
     private Scanner sc;
 
     public StudentManager(Scanner sc){
-        this.sc = sc; 
+        this.sc = sc;
     }
 
-    @Override 
-    public void add(){
+    @Override
+public void add(){
+    System.out.println("\n--- Add Student (BSCS 2-1 Only) ---");
 
-        System.out.println("\n--- Add Student (BSCS 2-1 Only) ---");
-        try{ 
-            String id;
-            while (true){
-                System.out.print("Student ID: ");
-                id = sc.nextLine();
+    // ID (mandatory)
+    String id;
+    while(true){
+        System.out.print("Student ID: ");
+        id = sc.nextLine();
+        if(!id.isBlank()) break;
+        System.out.println("Student ID cannot be blank!");
+    }
 
-                if (id.isBlank()){
-                    System.out.println("Bawal po an blank lang! ompo.");
-                } else {
-                    break;
-                }
+    // Name (mandatory)
+    String name;
+    while(true){
+        System.out.print("Name: ");
+        name = sc.nextLine();
+        if(!name.isBlank()) break;
+        System.out.println("Name cannot be blank!");
+    }
+
+    // Age (mandatory, validated, dynamic po)
+    int age;
+    while(true){
+        System.out.print("Age (15-100): ");
+        String ageInput = sc.nextLine();
+        try{
+            age = Integer.parseInt(ageInput);
+            if(age < 15 || age > 100){
+                System.out.println("Invalid age! Enter 15-100 only.");
+            } else {
+                break;
             }
-
-            String name;
-            while (true){
-                System.out.print("Name: ");
-                name = sc.nextLine(); //may name po na merong number (stop discrimination sir)
-
-                if (name.isBlank()){
-                    System.out.println("Syempre may pangaran ka!");
-                } else {
-                    break;
-                }
-            }
-
-            int age = 0;
-            while (true){
-                try{
-                    System.out.print("Age: ");
-                    age = sc.nextInt();
-                    sc.nextLine();
-                    break;
-                }
-                catch(InputMismatchException e){
-                    System.out.println("Please enter a valid number for age!");
-                    sc.nextLine(); 
-                }
-            }
-
-            // Student is auto-assigned to BSCS 2-1
-            Student s = new Student(id, name, age);
-            students[count++] = s;
-
-            // Input grade
-            while (true){
-                try{
-                    System.out.print("GWA: ");
-                    double grade = sc.nextDouble();
-                    sc.nextLine();
-                    s.setGrade(grade);
-                    break;
-                }
-                catch(InputMismatchException e){
-                    System.out.println("Please enter a valid number for grade!");
-                    sc.nextLine();
-                }
-            }
-
-            System.out.println("Student added successfully!");
         }
-        catch(Exception e){
-            System.out.println("Error adding student. Please try again.");
-            sc.nextLine();
+        catch(NumberFormatException e){
+            System.out.println("Please enter a valid number for age!");
         }
     }
 
-    @Override 
+    // GWA (mandatory, validated, dynamic rin
+    float grade;
+    while(true){
+        System.out.print("GWA (1.0-5.0): ");
+        String gradeInput = sc.nextLine();
+        try{
+            grade = Float.parseFloat(gradeInput);
+            if(grade < 1.0f || grade > 5.0f){
+                System.out.println("Invalid GWA! Enter 1.0-5.0 only.");
+            } else {
+                break;
+            }
+        }
+        catch(NumberFormatException e){
+            System.out.println("Please enter a valid number for GWA!");
+        }
+    }
+
+    // Final confirmation before saving
+    System.out.println("\n--- Review Student Info ---");
+    System.out.println("ID: " + id);
+    System.out.println("Name: " + name);
+    System.out.println("Age: " + age);
+    System.out.println("GWA: " + grade);
+
+    String confirm;
+    while(true){
+        System.out.print("Do you want to save this student? [yes/no]: ");
+        confirm = sc.nextLine().trim().toLowerCase();
+        if(confirm.equals("yes") || confirm.equals("no")) break;
+        System.out.println("Invalid input! Type 'yes' or 'no'.");
+    }
+
+    if(confirm.equals("yes")){
+        Student s = new Student(id, name, age);
+        s.setGrade(grade);
+        students[count++] = s;
+        System.out.println("Student added successfully!");
+    } else {
+        System.out.println("Add student cancelled.");
+    }
+}
+
+
+    @Override
     public void viewAll(){
         System.out.println("\n--- Student List (BSCS 2-1) ---");
         if (count == 0){
@@ -223,17 +236,8 @@ class StudentManager implements Manageable{
 
     @Override
     public void search(){
-        String id;
-        while (true){
-            System.out.print("Enter student ID to search: ");
-            id = sc.nextLine();
-
-            if (id.isBlank()){
-                System.out.println("Student ID cannot be blank!");
-            } else {
-                break;
-            }
-        }
+        System.out.print("Enter student ID to search: ");
+        String id = sc.nextLine();
 
         for (int i = 0; i < count; i++){
             if (students[i].getId().equals(id)){
@@ -245,96 +249,149 @@ class StudentManager implements Manageable{
         System.out.println("Student not found");
     }
 
-    @Override 
-    public void update(){
-        String id;
-        while (true){
-            System.out.print("Enter student ID to update: ");
-            id = sc.nextLine();
+    @Override
+public void update(){
+    System.out.print("Enter student ID to update: ");
+    String id = sc.nextLine();
 
-            if (id.isBlank()){
-                System.out.println("Student ID cannot be blank!");
-            } else {
-                break;
-            }
-        }
+    for (int i = 0; i < count; i++){
+        if (students[i].getId().equals(id)){
+            Student s = students[i];
 
-        for (int i = 0; i < count; i++){
-            if (students[i].getId().equals(id)){
+            // Temporary variables to hold new info
+            String tempName = s.getName();
+            int tempAge = s.getAge();
+            float tempGrade = s.getGrade();
 
-                String name;
-                while (true){
-                    System.out.print("New Name: ");
-                    name = sc.nextLine();
+            // Show menu for which field to update
+            System.out.println("\nWhat do you want to update?");
+            System.out.println("1. Name");
+            System.out.println("2. Age");
+            System.out.println("3. Grade");
+            System.out.println("4. Cancel");
+            System.out.print("Choice: ");
 
-                    if (name.isBlank()){
-                        System.out.println("Name cannot be blank!");
-                    } else {
-                        break;
-                    }
-                }
-                students[i].setName(name);
-
-                int age = 0;
-                while (true){
-                    try{
-                        System.out.print("New Age: ");
-                        age = sc.nextInt();
-                        sc.nextLine();
-                        break;
-                    }
-                    catch(InputMismatchException e){
-                        System.out.println("Please enter a valid number for age!");
-                        sc.nextLine();
-                    }
-                }
-                students[i].setAge(age);
-
-                // NEW: Removed course + year editing ✔
-                // Students stay in BSCS 2-1 permanently
-
-                while (true){
-                    try{
-                        System.out.print("New Grade: ");
-                        double grade = sc.nextDouble();
-                        sc.nextLine();
-                        students[i].setGrade(grade);
-                        break;
-                    }
-                    catch(InputMismatchException e){
-                        System.out.println("Please enter a valid number for grade!");
-                        sc.nextLine();
-                    }
-                }
-
-                System.out.println("Student updated successfully!");
+            int choice;
+            try{
+                choice = sc.nextInt();
+                sc.nextLine();
+            } catch(InputMismatchException e){
+                System.out.println("Invalid input!");
+                sc.nextLine();
                 return;
             }
-        }
-        System.out.println("Student not found.");
-    }
 
-    @Override 
-    public void delete(){
-        String id;
-        while (true){
-            System.out.print("Enter student ID to delete: ");
-            id = sc.nextLine();
-
-            if (id.isBlank()){
-                System.out.println("Student ID cannot be blank!");
-            } else {
-                break;
+            switch (choice){
+                case 1 -> {
+                    System.out.print("New Name (Current: " + s.getName() + ") leave blank to keep: ");
+                    String newName = sc.nextLine();
+                    if (!newName.isBlank()) tempName = newName;
+                }
+                case 2 -> {
+                    while(true){
+                        System.out.print("New Age (15-100, Current: " + s.getAge() + ") leave blank to keep: ");
+                        String ageInput = sc.nextLine();
+                        if(ageInput.isBlank()) break; // keep current age
+                        try{
+                            int newAge = Integer.parseInt(ageInput);
+                            if(newAge < 15 || newAge > 100){
+                                System.out.println("Invalid age! Enter 15-100 only.");
+                            } else {
+                                tempAge = newAge;
+                                break;
+                            }
+                        } catch(NumberFormatException e){
+                            System.out.println("Invalid input! Enter a number.");
+                        }
+                    }
+                }
+                case 3 -> {
+                    while(true){
+                        System.out.print("New GWA (1.0-5.0, Current: " + s.getGrade() + ") leave blank to keep: ");
+                        String gradeInput = sc.nextLine();
+                        if(gradeInput.isBlank()) break; // keep current grade
+                        try{
+                            float newGrade = Float.parseFloat(gradeInput);
+                            if(newGrade < 1.0f || newGrade > 5.0f){
+                                System.out.println("Invalid GWA! Enter 1.0-5.0 only.");
+                            } else {
+                                tempGrade = newGrade;
+                                break;
+                            }
+                        } catch(NumberFormatException e){
+                            System.out.println("Invalid input! Enter a number.");
+                        }
+                    }
+                }
+                case 4 -> {
+                    System.out.println("Update cancelled.");
+                    return;
+                }
+                default -> {
+                    System.out.println("Invalid option!");
+                    return;
+                }
             }
+
+            // Final confirmation before saving changes
+            System.out.println("\n--- Review Changes ---");
+            System.out.println("Name: " + tempName);
+            System.out.println("Age: " + tempAge);
+            System.out.println("GWA: " + tempGrade);
+
+            String confirm;
+            while(true){
+                System.out.print("Do you want to save these changes? [yes/no]: ");
+                confirm = sc.nextLine().trim().toLowerCase();
+                if(confirm.equals("yes") || confirm.equals("no")) break;
+                System.out.println("Invalid input! Type 'yes' or 'no'.");
+            }
+
+            if(confirm.equals("yes")){
+                s.setName(tempName);
+                s.setAge(tempAge);
+                s.setGrade(tempGrade);
+                System.out.println("Changes saved successfully!");
+            } else {
+                System.out.println("Update cancelled. No changes applied.");
+            }
+
+            return; // exit after update attempt
         }
+    }
+    System.out.println("Student not found.");
+}
+
+    @Override
+    public void delete(){
+        System.out.print("Enter student ID to delete: ");
+        String id = sc.nextLine();
 
         for (int i = 0; i < count; i++){
             if (students[i].getId().equals(id)){
-                for (int j = i; j < count - 1; j++){
-                    students[j] = students[j + 1];
+                // Show student info before deleting
+                System.out.println("\nStudent info to be deleted:");
+                students[i].describe();
+
+                // Final confirmation before deleting
+                String confirm;
+                while(true){
+                    System.out.print("Are you sure you want to delete this student? [yes/no]: ");
+                    confirm = sc.nextLine().trim().toLowerCase();
+                    if(confirm.equals("yes") || confirm.equals("no")) break;
+                    System.out.println("Invalid input! Type 'yes' or 'no'.");
                 }
-                count--;
-                System.out.println("Student deleted successfully!");
+
+                if(confirm.equals("yes")){
+                    for (int j = i; j < count - 1; j++){
+                        students[j] = students[j + 1];
+                    }
+                    count--;
+                    System.out.println("Student deleted successfully!");
+                } else {
+                    System.out.println("Deletion cancelled. No changes applied.");
+                }
+
                 return;
             }
         }
